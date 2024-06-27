@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Kedai Makanan</title>
+    <link rel="stylesheet" href="css/style_menu.css">
+</head>
+<body>
+<header>
+    <div class="logo">Kedai [Nama Kedai]</div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="order.html">Order</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="menu">
+    <h2>Menu Andalan</h2>
+    <div class="menu-item">
+        <img src="menu1.jpg" alt="Menu Item">
+        <h3>Menu Item 1</h3>
+        <p>Harga: Rp 50.000</p>
+        <form id="orderForm1">
+            <input type="number" id="quantity1" name="quantity" min="1" placeholder="Quantity">
+            <button type="button" onclick="addToOrder('Menu Item 1', 50000, 'quantity1')">Order</button>
+        </form>
+    </div>
+    <div class="menu-item">
+        <img src="menu2.jpg" alt="Menu Item">
+        <h3>Menu Item 2</h3>
+        <p>Harga: Rp 60.000</p>
+        <form id="orderForm2">
+            <input type="number" id="quantity2" name="quantity" min="1" placeholder="Quantity">
+            <button type="button" onclick="addToOrder('Menu Item 2', 60000, 'quantity2')">Order</button>
+        </form>
+    </div>
+    <!-- Tambahkan menu-item lainnya sesuai kebutuhan -->
+</section>
+
+<script src="scripts/menu.js"></script>
+</body>
+</html>
