@@ -8,56 +8,88 @@
 </head>
 <body>
 <header>
-    <div class="logo">Kedai [Nama Kedai]</div>
+    <div class="logo">Kedai MAEDA</div>
     <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="menu.html">Menu</a></li>
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#contact">Contact</a></li>
             <li><a href="order.html">Order</a></li>
+            <li><a href="payment.html">Payment</a></li>
         </ul>
     </nav>
 </header>
 
 <section id="orders">
     <h2>Your Orders</h2>
-    <div id="order-list"></div>
+    <h3>Pending Orders</h3>
+    <table id="pending-orders" border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Address</th>
+            <th>Order Items</th>
+            <th>Total</th>
+            <th>Payment Method</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody id="pending-list">
+        <!-- Rows for pending orders will go here -->
+        </tbody>
+    </table>
+
+    <h3>Paid Orders</h3>
+    <table id="paid-orders" border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Address</th>
+            <th>Order Items</th>
+            <th>Total</th>
+            <th>Payment Method</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody id="paid-list">
+        <!-- Rows for paid orders will go here -->
+        </tbody>
+    </table>
 </section>
 
 <script>
-    function loadOrders() {
-        fetch('/order')
-            .then(response => response.json())
-            .then(orders => {
-                let orderList = document.getElementById('order-list');
-                orderList.innerHTML = '';
+    async function fetchOrders() {
+        const response = await fetch('http://localhost:8080/order');
+        const orders = await response.json();
 
-                orders.forEach(order => {
-                    let orderItem = document.createElement('div');
-                    orderItem.classList.add('order-item');
-                    orderItem.innerHTML = `
-                            <h3>Order ID: ${order.id}</h3>
-                            <p>Date: ${order.date}</p>
-                            <p>Customer: ${order.customer}</p>
-                            <p>Address: ${order.address}</p>
-                            <p>Total: Rp ${order.total}</p>
-                            <p>Payment Method: ${order.paymentMethod}</p>
-                            <p>Status: ${order.status}</p>
-                            <h4>Items:</h4>
-                            <ul>
-                                ${order.orderItems.map(item => `<li>${item.menu.name} - ${item.quantity} pcs - Rp ${item.price}</li>`).join('')}
-                            </ul>
-                        `;
-                    orderList.appendChild(orderItem);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching orders:', error);
-            });
+        const pendingOrdersTable = document.getElementById('pending-list')
+        const paidOrdersTable = document.getElementById('paid-list')
+
+        orders.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${order.id}</td>
+                <td>${order.date}</td>
+                <td>${order.customer}</td>
+                <td>${order.address}</td>
+                <td>${order.orderItems.map(item => item.name).join(', ')}</td>
+                <td>${order.total}</td>
+                <td>${order.paymentMethod}</td>
+                <td>${order.status}</td>
+            `;
+
+            if (order.status === 'Pending') {
+                pendingOrdersTable.appendChild(row);
+            } else if (order.status === 'paid') {
+                paidOrdersTable.appendChild(row);
+            }
+        });
     }
 
-    document.addEventListener('DOMContentLoaded', loadOrders);
+    document.addEventListener('DOMContentLoaded', fetchOrders);
 </script>
 </body>
 </html>
