@@ -1,0 +1,123 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 1rem 2rem;
+    color: white;
+}
+
+header .logo {
+    font-size: 1.5rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+section#menu {
+    padding: 2rem;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto 2rem;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 0.5rem;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.menu-item img {
+    width: 100px;
+    height: auto;
+    border-radius: 10px;
+    margin-right: 1rem;
+}
+
+section#customer-info {
+    padding: 2rem;
+    text-align: center;
+}
+
+form#orderForm {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.customer-details, .menu-items {
+    margin-bottom: 2rem;
+}
+
+.customer-details input, .customer-details select, .menu-items input[type="number"] {
+    width: calc(100% - 2rem);
+    padding: 0.5rem;
+    margin: 1rem 1rem 0;
+    box-sizing: border-box;
+}
+
+.menu-items h2 {
+    text-align: center;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+}
+
+.menu-item input[type="checkbox"] {
+    margin-right: 1rem;
+}
+
+.menu-item label {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+form#orderForm button {
+    display: block;
+    width: calc(100% - 2rem);
+    padding: 0.5rem;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 1rem 1rem 0;
+    box-sizing: border-box;
+}
+
+form#orderForm button:hover {
+    background-color: #ff5a4f;
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments - Kedai Makanan</title>
+    <link rel="stylesheet" href="css/style_payment.css">
+</head>
+<body>
+<header>
+    <div class="logo">Kedai MAEDA</div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="order.html">OrderList</a></li>
+            <li><a href="payment.html">Payment</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="payments">
+    <h2>Payment Transactions</h2>
+    <table id="payment-transactions" border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Order ID</th>
+            <th>Payment Method</th>
+            <th>Amount</th>
+        </tr>
+        </thead>
+        <tbody id="payment-list"></tbody>
+    </table>
+
+    <h2>Make a Payment</h2>
+    <form id="payment-form">
+        <label for="ordersId">Order ID:</label>
+        <input type="number" id="ordersId" name="ordersId" required><br>
+
+        <label for="paymentMethod">Payment Method:</label>
+        <input type="text" id="paymentMethod" name="paymentMethod" required><br>
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required><br>
+
+        <button type="submit">Submit Payment</button>
+    </form>
+</section>
+
+<script>
+    async function fetchPayments() {
+        const response = await fetch('http://localhost:8080/payment');
+        const payments = await response.json();
+
+        const paymentTable = document.getElementById('payment-list')
+
+        payments.forEach(payment => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${payment.id}</td>
+                <td>${payment.date}</td>
+                <td>${payment.ordersId}</td>
+                <td>${payment.paymentMethod}</td>
+                <td>${payment.amount}</td>
+            `;
+            paymentTable.appendChild(row);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchPayments);
+
+    document.getElementById('payment-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const ordersId = document.getElementById('ordersId').value;
+        const paymentMethod = document.getElementById('paymentMethod').value;
+        const amount = document.getElementById('amount').value;
+
+        const response = await fetch('http://localhost:8080/payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ordersId, paymentMethod, amount }),
+        });
+
+        if (response.ok) {
+            alert('Payment submitted successfully');
+            location.reload(); // Reload the page to update the table
+        } else {
+            alert('Failed to submit payment');
+        }
+    });
+</script>
+</body>
+</html>

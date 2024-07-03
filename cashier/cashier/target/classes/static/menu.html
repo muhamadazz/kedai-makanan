@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Kedai Makanan</title>
+    <link rel="stylesheet" href="css/style_menu.css">
+</head>
+<body>
+<header>
+    <div class="logo">Kedai MAEDA</div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="order.html">OrderList</a></li>
+            <li><a href="payment.html">Payment</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="menu">
+    <h2>Daftar Menu</h2>
+    <table id="menuTable">
+        <thead>
+        <tr>
+            <th>Nama</th>
+            <th>Deskripsi</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Kategori</th>
+            <th>Pesan</th>
+            <th>Jumlah</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Rows will be added dynamically here -->
+        </tbody>
+    </table>
+</section>
+
+<section id="customer-info">
+    <h2>Isi Form ini untuk melanjutkan pemesanan</h2>
+    <form id="orderForm">
+        <div class="customer-details">
+            <input type="text" id="customer" name="customer" placeholder="Customer Name" required>
+            <input type="text" id="address" name="address" placeholder="Address" required>
+            <select id="paymentMethod" name="paymentMethod" required>
+                <option value="Credit Card">Credit Card</option>
+                <option value="PayPal">PayPal</option>
+                <option value="PayPal">Cash</option>
+                <!-- Tambahkan metode pembayaran lainnya jika perlu -->
+            </select>
+        </div>
+        <button type="button" onclick="submitOrder()">Submit Order</button>
+    </form>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        fetch('http://localhost:8080/menu')
+            .then(response => response.json())
+            .then(data => {
+                const menuTableBody = document.querySelector('#menuTable tbody');
+                data.forEach(menu => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${menu.name}</td>
+                        <td>${menu.description}</td>
+                        <td>Rp ${menu.price.toLocaleString()}</td>
+                        <td>${menu.stock}</td>
+                        <td>${menu.category}</td>
+                        <td><input type="checkbox" data-id="${menu.id}"></td>
+                        <td><input type="number" min="1" max="${menu.stock}" disabled></td>
+                    `;
+                    menuTableBody.appendChild(row);
+                });
+
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', (event) => {
+                        const inputNumber = checkbox.parentElement.nextElementSibling.firstChild;
+                        if (checkbox.checked) {
+                            inputNumber.disabled = false;
+                        } else {
+                            inputNumber.disabled = true;
+                            inputNumber.value = '';
+                        }
+                    });
+                });
+            })
+            .catch(error => console.error('Error fetching menu:', error));
+    });
+
+    function submitOrder() {
+        const customer = document.getElementById('customer').value;
+        const address = document.getElementById('address').value;
+        const paymentMethod = document.getElementById('paymentMethod').value;
+
+        const orderItems = [];
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+
+        checkboxes.forEach(checkbox => {
+            const menuId = checkbox.getAttribute('data-id');
+            const quantity = checkbox.parentElement.nextElementSibling.firstChild.value;
+            if (quantity) {
+                orderItems.push({
+                    menu: { id: parseInt(menuId) },
+                    quantity: parseInt(quantity)
+                });
+            }
+        });
+
+        if (customer && address && orderItems.length > 0) {
+            const orderData = {
+                customer: customer,
+                address: address,
+                orderItems: orderItems,
+                paymentMethod: paymentMethod
+            };
+
+            fetch('http://localhost:8080/order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Order submitted successfully');
+                    // Reset form
+                    document.getElementById('orderForm').reset();
+                    const inputs = document.querySelectorAll('input[type="number"]');
+                    inputs.forEach(input => input.disabled = true);
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(checkbox => checkbox.checked = false);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to submit order');
+                });
+        } else {
+            alert('Please fill all customer information and add items to the order');
+        }
+    }
+</script>
+</body>
+</html>
