@@ -33,12 +33,41 @@
             <th>Total</th>
             <th>Payment Method</th>
             <th>Status</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody id="pending-list">
         <!-- Rows for pending orders will go here -->
         </tbody>
     </table>
+
+    <section id="edit-order-form" style="display: none;">
+        <h2>Edit Order</h2>
+        <form id="orderForm">
+            <input type="hidden" id="orderId" name="orderId">
+            <div>
+                <label for="customer">Customer:</label>
+                <input type="text" id="customer" name="customer">
+            </div>
+            <div>
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address">
+            </div>
+            <div>
+                <label for="orderItems">Order Items:</label>
+                <textarea id="orderItems" name="orderItems"></textarea>
+            </div>
+            <div>
+                <label for="paymentMethod">Payment Method:</label>
+                <select id="paymentMethod" name="paymentMethod">
+                    <option value="credit card">Credit Card</option>
+                    <option value="cash">Cash</option>
+                    <option value="paypal">Paypal</option>
+                </select>
+            </div>
+            <button type="button" onclick="submitOrderUpdate()">Update Order</button>
+        </form>
+    </section>
 
     <h3>Paid Orders</h3>
     <table id="paid-orders" border="1">
@@ -52,6 +81,7 @@
             <th>Total</th>
             <th>Payment Method</th>
             <th>Status</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody id="paid-list">
@@ -61,36 +91,7 @@
 </section>
 
 
-<script>
-    async function fetchOrders() {
-        const response = await fetch('http://localhost:8080/order');
-        const orders = await response.json();
 
-        const pendingOrdersTable = document.getElementById('pending-list')
-        const paidOrdersTable = document.getElementById('paid-list')
-
-        orders.forEach(order => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${order.id}</td>
-                <td>${order.date}</td>
-                <td>${order.customer}</td>
-                <td>${order.address}</td>
-                <td>${order.orderItems.map(item => item.name).join(', ')}</td>
-                <td>${order.total}</td>
-                <td>${order.paymentMethod}</td>
-                <td>${order.status}</td>
-            `;
-
-            if (order.status === 'Pending') {
-                pendingOrdersTable.appendChild(row);
-            } else if (order.status === 'paid') {
-                paidOrdersTable.appendChild(row);
-            }
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', fetchOrders);
-</script>
+<script src="scripts/order.js"></script>
 </body>
 </html>

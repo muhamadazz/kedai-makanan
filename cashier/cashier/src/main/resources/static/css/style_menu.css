@@ -68,9 +68,13 @@ section#customer-info {
 }
 
 form#orderForm {
-    max-width: 800px;
+    max-width: 600px;
     margin: 0 auto;
     text-align: left;
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .customer-details, .menu-items {
@@ -79,9 +83,11 @@ form#orderForm {
 
 .customer-details input, .customer-details select, .menu-items input[type="number"] {
     width: calc(100% - 2rem);
-    padding: 0.5rem;
+    padding: 0.75rem;
     margin: 1rem 1rem 0;
     box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .menu-items h2 {
@@ -108,7 +114,7 @@ form#orderForm {
 form#orderForm button {
     display: block;
     width: calc(100% - 2rem);
-    padding: 0.5rem;
+    padding: 0.75rem;
     background-color: #ff6f61;
     color: white;
     border: none;
@@ -116,6 +122,8 @@ form#orderForm button {
     cursor: pointer;
     margin: 1rem 1rem 0;
     box-sizing: border-box;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
 form#orderForm button:hover {

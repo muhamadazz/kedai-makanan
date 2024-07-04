@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,7 +105,7 @@ public class OrderService {
             }
         }
 
-        existingOrder.setDate(updatedOrder.getDate());
+        existingOrder.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         existingOrder.setCustomer(updatedOrder.getCustomer());
         existingOrder.setAddress(updatedOrder.getAddress());
         existingOrder.setTotal(total);
@@ -111,6 +113,11 @@ public class OrderService {
         existingOrder.setStatus(updatedOrder.getStatus());
 
         return ordersRepository.save(existingOrder);
+    }
+
+    @Transactional
+    public void deleteOrderbyid(long orderId) {
+        ordersRepository.deleteById(orderId);
     }
 
 

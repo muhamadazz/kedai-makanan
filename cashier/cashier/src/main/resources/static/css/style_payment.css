@@ -65,6 +65,16 @@ form {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+form .form-group {
+    width: 100%;
 }
 
 form label {
@@ -72,11 +82,14 @@ form label {
     margin-bottom: 0.5rem;
 }
 
-form input {
+form input, form select {
     padding: 0.5rem;
     width: 100%;
-    max-width: 300px;
-    margin-bottom: 1rem;
+    box-sizing: border-box;
+}
+
+form input[readonly] {
+    background-color: #e9e9e9;
 }
 
 form button {
